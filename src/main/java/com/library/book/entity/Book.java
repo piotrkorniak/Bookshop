@@ -1,4 +1,6 @@
-package com.library.entity;
+package com.library.book.entity;
+
+import com.library.book.dto.AddBookDto;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +15,13 @@ public class Book {
     private String Author;
     private String Description;
     private String ImageUrl;
+
+    public Book(AddBookDto addBookDto) {
+        Title = addBookDto.getTitle();
+        Author = addBookDto.getAuthor();
+        Description = addBookDto.getDescription();
+        ImageUrl = addBookDto.getImageUrl();
+    }
 
     public long getId() {
         return Id;

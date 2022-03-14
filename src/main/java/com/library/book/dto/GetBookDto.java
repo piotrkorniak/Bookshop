@@ -1,10 +1,30 @@
-package com.library.entity.request;
+package com.library.book.dto;
 
-public class AddBookRequest {
+import com.library.book.entity.Book;
+
+public class GetBookDto {
+    private long Id;
     private String Title;
     private String Author;
     private String Description;
     private String ImageUrl;
+
+    public GetBookDto(Book book) {
+        Id = book.getId();
+        Title = book.getTitle();
+        Author = book.getAuthor();
+        Description = book.getDescription();
+        ImageUrl = book.getImageUrl();
+    }
+
+
+    public long getId() {
+        return Id;
+    }
+
+    public void setId(long id) {
+        Id = id;
+    }
 
     public String getTitle() {
         return Title;

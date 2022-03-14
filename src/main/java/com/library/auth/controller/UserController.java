@@ -5,7 +5,7 @@ import com.library.auth.dto.AuthToken;
 import com.library.auth.dto.LoginUser;
 import com.library.auth.dto.UserDto;
 import com.library.auth.entity.User;
-import com.library.auth.service.UserService;
+import com.library.auth.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,7 +28,7 @@ public class UserController {
     private TokenProvider jwtTokenUtil;
 
     @Autowired
-    private UserService userService;
+    private IUserService IUserService;
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> generateToken(@RequestBody LoginUser loginUser) throws AuthenticationException {
@@ -46,7 +46,7 @@ public class UserController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public User saveUser(@RequestBody UserDto user) {
-        return userService.save(user);
+        return IUserService.save(user);
     }
 
 
