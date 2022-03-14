@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service(value = "IBookService")
+@Service
 public class BookService implements IBookService {
     @Autowired
     private BookDao bookDao;

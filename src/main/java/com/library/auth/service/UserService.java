@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Service(value = "IUserService")
+@Service
 public class UserService implements UserDetailsService, IUserService {
 
     @Autowired
@@ -99,6 +99,6 @@ public class UserService implements UserDetailsService, IUserService {
 
         var user = userDao.findByUsername(username);
 
-        return new AuthResponseDto(user.getId(), user.getUsername(), user.getEmail(), user.getName(), user.getMainRole().toString(), token);
+        return new AuthResponseDto(user.getId(), user.getUsername(), user.getEmail(), user.getName(), user.getMainRole(), token);
     }
 }

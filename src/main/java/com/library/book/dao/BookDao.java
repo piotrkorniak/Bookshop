@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BookDao extends JpaRepository<Book, Long> {
-    Book findBookByTitle(String title);
 }
 
 

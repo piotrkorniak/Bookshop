@@ -73,13 +73,11 @@ public class User {
         this.roles = roles;
     }
 
-    public Role getMainRole() {
+    public String getMainRole() {
         if (isAdmin()) {
-            return roles.stream().filter(x -> x.getName() == "ADMIN")
-                    .findFirst().get();
+            return "ADMIN";
         } else {
-            return roles.stream().filter(x -> x.getName() == "USER")
-                    .findFirst().get();
+            return "USER";
         }
     }
 

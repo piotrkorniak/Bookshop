@@ -14,10 +14,8 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/book")
-@PreAuthorize("hasRole('USER')")
 public class BookController {
     @Autowired
-    @Resource(name = "IBookService")
     private IBookService bookService;
 
 
@@ -26,15 +24,13 @@ public class BookController {
         return bookService.GetBooks();
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    @GetMapping(value = "/{id}")
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public GetBookDto getBook(@PathVariable("id") Long id) {
         return bookService.GetBook(id);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping(value = "/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") Long id) {
         bookService.DeleteBook(id);
     }

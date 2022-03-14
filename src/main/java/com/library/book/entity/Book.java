@@ -16,6 +16,9 @@ public class Book {
     private String Description;
     private String ImageUrl;
 
+    public Book() {
+    }
+
     public Book(AddBookDto addBookDto) {
         Title = addBookDto.getTitle();
         Author = addBookDto.getAuthor();
