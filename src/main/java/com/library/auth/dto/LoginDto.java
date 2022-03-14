@@ -1,6 +1,6 @@
 package com.library.auth.dto;
 
-public class LoginUser {
+public class LoginDto {
     private String username;
     private String password;
 

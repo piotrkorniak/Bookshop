@@ -2,7 +2,7 @@ package com.library.auth.dto;
 
 import com.library.auth.entity.User;
 
-public class UserDto {
+public class RegisterDto {
 
     private String username;
     private String password;

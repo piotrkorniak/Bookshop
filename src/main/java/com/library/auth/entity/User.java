@@ -25,6 +25,14 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -63,5 +71,19 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Role getMainRole() {
+        if (isAdmin()) {
+            return roles.stream().filter(x -> x.getName() == "ADMIN")
+                    .findFirst().get();
+        } else {
+            return roles.stream().filter(x -> x.getName() == "USER")
+                    .findFirst().get();
+        }
+    }
+
+    private Boolean isAdmin() {
+        return roles.stream().anyMatch(o -> o.getName() == "ADMIN");
     }
 }

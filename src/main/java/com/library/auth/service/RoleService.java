@@ -6,7 +6,7 @@ import com.library.auth.service.interfaces.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service(value = "roleService")
+@Service(value = "IRoleService")
 public class RoleService implements IRoleService {
 
     @Autowired

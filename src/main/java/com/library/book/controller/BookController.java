@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -16,6 +17,7 @@ import java.util.List;
 @PreAuthorize("hasRole('USER')")
 public class BookController {
     @Autowired
+    @Resource(name = "IBookService")
     private IBookService bookService;
 
 
