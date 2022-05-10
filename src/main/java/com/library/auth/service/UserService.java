@@ -43,12 +43,12 @@ public class UserService implements UserDetailsService, IUserService {
     @Autowired
     private TokenProvider jwtTokenUtil;
 
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userDao.findByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userDao.findByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthority(user));
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthority(user));
     }
 
     private Set<SimpleGrantedAuthority> getAuthority(User user) {
@@ -66,27 +66,28 @@ public class UserService implements UserDetailsService, IUserService {
     }
 
     @Override
-    public User findOne(String username) {
-        return userDao.findByUsername(username);
+    public User findOne(String email) {
+        return userDao.findByEmail(email);
     }
 
     @Override
-    public User save(RegisterDto user) {
-
-        User nUser = user.getUserFromDto();
-        nUser.setPassword(bcryptEncoder.encode(user.getPassword()));
+    public User save(RegisterDto user) throws Exception {
+        if(userDao.findByEmail(user.getEmail()) != null)
+            throw new Exception("Email jest w użyciu");
+        User newUser = user.getUserFromDto();
+        newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
 
         Role role = roleService.findByName("USER");
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(role);
 
-        if (nUser.getEmail().split("@")[1].equals("admin.admin")) {
+        if (newUser.getEmail().split("@")[1].equals("admin.admin")) {
             role = roleService.findByName("ADMIN");
             roleSet.add(role);
         }
 
-        nUser.setRoles(roleSet);
-        return userDao.save(nUser);
+        newUser.setRoles(roleSet);
+        return userDao.save(newUser);
     }
 
     @Override
@@ -97,8 +98,8 @@ public class UserService implements UserDetailsService, IUserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = jwtTokenUtil.generateToken(authentication);
 
-        var user = userDao.findByUsername(username);
+        var user = userDao.findByEmail(username);
 
-        return new AuthResponseDto(user.getId(), user.getUsername(), user.getEmail(), user.getName(), user.getMainRole(), token);
+        return new AuthResponseDto(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getMainRole(), token);
     }
 }

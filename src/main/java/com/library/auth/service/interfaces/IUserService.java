@@ -7,11 +7,11 @@ import com.library.auth.entity.User;
 import java.util.List;
 
 public interface IUserService {
-    User save(RegisterDto user);
+    User save(RegisterDto user) throws Exception;
 
     List<User> findAll();
 
-    User findOne(String username);
+    User findOne(String email);
 
     AuthResponseDto login(String login, String password);
 }

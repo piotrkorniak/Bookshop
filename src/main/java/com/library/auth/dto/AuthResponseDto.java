@@ -1,37 +1,32 @@
 package com.library.auth.dto;
 
+
+import java.util.UUID;
+
 public class AuthResponseDto {
 
-    private long id;
-    private String username;
+    private UUID id;
     private String email;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String token;
     private String role;
 
-    public AuthResponseDto(long id, String username, String email, String name, String role, String token) {
+    public AuthResponseDto(UUID id, String email, String firstName, String lastName, String role, String token) {
         this.id = id;
-        this.username = username;
         this.email = email;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.token = token;
         this.role = role;
     }
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getEmail() {
@@ -41,13 +36,21 @@ public class AuthResponseDto {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public String getName() {
-        return name;
+    
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getToken() {

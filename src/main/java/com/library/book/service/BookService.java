@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class BookService implements IBookService {
@@ -22,7 +23,7 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public GetBookDto GetBook(long id) {
+    public GetBookDto GetBook(UUID id) {
         var book = bookDao.getById(id);
         return new GetBookDto(book);
     }
@@ -34,7 +35,7 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public void DeleteBook(long id) {
+    public void DeleteBook(UUID id) {
         bookDao.deleteById(id);
     }
 }

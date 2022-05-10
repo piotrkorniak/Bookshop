@@ -2,8 +2,10 @@ package com.library.book.dto;
 
 import com.library.book.entity.Book;
 
+import java.util.UUID;
+
 public class GetBookDto {
-    private long Id;
+    private UUID Id;
     private String Title;
     private String Author;
     private String Description;
@@ -18,11 +20,11 @@ public class GetBookDto {
     }
 
 
-    public long getId() {
+    public UUID getId() {
         return Id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         Id = id;
     }
 

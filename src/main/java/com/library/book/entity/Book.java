@@ -5,12 +5,13 @@ import com.library.book.dto.AddBookDto;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.UUID;
 
 @Entity
 public class Book {
     @Id
     @GeneratedValue
-    private long Id;
+    private UUID Id;
     private String Title;
     private String Author;
     private String Description;
@@ -26,11 +27,11 @@ public class Book {
         ImageUrl = addBookDto.getImageUrl();
     }
 
-    public long getId() {
+    public UUID getId() {
         return Id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         Id = id;
     }
 

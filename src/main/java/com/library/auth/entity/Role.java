@@ -1,13 +1,14 @@
 package com.library.auth.entity;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue
+    private UUID id;
 
     @Column
     private String name;
@@ -15,11 +16,11 @@ public class Role {
     @Column
     private String description;
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

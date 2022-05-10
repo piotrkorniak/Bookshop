@@ -2,20 +2,31 @@ package com.library.auth.dto;
 
 import com.library.auth.entity.User;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 public class RegisterDto {
-
-    private String username;
-    private String password;
+    @Email
     private String email;
-    private String name;
+    @Size(min = 8)
+    private String password;
 
 
-    public String getUsername() {
-        return username;
+    @NotEmpty
+    private String firstName;
+
+
+    @NotEmpty
+    private String lastName;
+
+
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -26,28 +37,28 @@ public class RegisterDto {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getName() {
-        return name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public User getUserFromDto() {
         User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
         user.setEmail(email);
-        user.setName(name);
+        user.setPassword(password);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
 
         return user;
     }

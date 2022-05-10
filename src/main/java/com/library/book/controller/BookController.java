@@ -4,12 +4,11 @@ import com.library.book.dto.AddBookDto;
 import com.library.book.dto.GetBookDto;
 import com.library.book.service.interfaces.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -25,13 +24,13 @@ public class BookController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public GetBookDto getBook(@PathVariable("id") Long id) {
+    public GetBookDto getBook(@PathVariable("id") UUID id) {
         return bookService.GetBook(id);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") UUID id) {
         bookService.DeleteBook(id);
     }
 
