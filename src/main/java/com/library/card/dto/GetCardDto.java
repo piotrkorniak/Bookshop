@@ -2,10 +2,8 @@ package com.library.card.dto;
 
 import com.library.book.dto.GetBookDto;
 import com.library.card.entity.Card;
-import org.springframework.data.util.Pair;
 
 import java.util.Dictionary;
-import java.util.List;
 import java.util.UUID;
 
 public class GetCardDto {

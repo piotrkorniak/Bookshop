@@ -1,6 +1,5 @@
 package com.library.card.dto;
 
-import com.library.book.dto.GetBookDto;
 import org.springframework.data.util.Pair;
 
 import java.util.List;

@@ -1,7 +1,6 @@
 package com.library.card.services;
 
 import com.library.auth.dao.UserDao;
-import com.library.auth.service.interfaces.IRoleService;
 import com.library.book.dao.BookDao;
 import com.library.card.dao.CardDao;
 import com.library.card.dto.GetCardDto;

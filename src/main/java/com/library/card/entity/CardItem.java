@@ -2,7 +2,10 @@ package com.library.card.entity;
 
 import com.library.book.entity.Book;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.util.UUID;
 
 @Entity
@@ -22,7 +25,7 @@ public class CardItem {
     }
 
     public CardItem() {
-        
+
     }
 
     public int getAmount() {

@@ -53,9 +53,7 @@ public class UserService implements UserDetailsService, IUserService {
 
     private Set<SimpleGrantedAuthority> getAuthority(User user) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        user.getRoles().forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
-        });
+        user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName())));
         return authorities;
     }
 
@@ -72,7 +70,7 @@ public class UserService implements UserDetailsService, IUserService {
 
     @Override
     public User save(RegisterDto user) throws Exception {
-        if(userDao.findByEmail(user.getEmail()) != null)
+        if (userDao.findByEmail(user.getEmail()) != null)
             throw new Exception("Email jest w użyciu");
         User newUser = user.getUserFromDto();
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));

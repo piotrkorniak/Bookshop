@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IBookService {
-    public void AddBook(AddBookDto addBookDto);
+    void AddBook(AddBookDto addBookDto);
 
-    public GetBookDto GetBook(UUID id);
+    GetBookDto GetBook(UUID id);
 
-    public List<GetBookDto> GetBooks();
+    List<GetBookDto> GetBooks();
 
-    public void DeleteBook(UUID id);
+    void DeleteBook(UUID id);
 }

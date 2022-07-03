@@ -6,9 +6,9 @@ import com.library.card.dto.UpdateCardDto;
 import java.util.UUID;
 
 public interface ICardService {
-    public GetCardDto updateCard(UpdateCardDto updateCardDto);
+    GetCardDto updateCard(UpdateCardDto updateCardDto);
 
-    public void removeCard(UUID cardId);
+    void removeCard(UUID cardId);
 
-    public GetCardDto getCard(UUID cardId);
+    GetCardDto getCard(UUID cardId);
 }

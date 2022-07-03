@@ -1,10 +1,9 @@
 package com.library.card.entity;
 
-import com.library.book.entity.Book;
-import org.hibernate.annotations.ManyToAny;
-
-import javax.persistence.*;
-import java.util.Dictionary;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
 import java.util.UUID;
 

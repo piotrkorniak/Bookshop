@@ -36,7 +36,7 @@ public class AuthResponseDto {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     public String getFirstName() {
         return firstName;
     }

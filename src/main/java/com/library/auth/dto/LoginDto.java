@@ -1,8 +1,5 @@
 package com.library.auth.dto;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-
 public class LoginDto {
     private String email;
     private String password;
