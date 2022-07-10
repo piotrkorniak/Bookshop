@@ -19,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -66,6 +67,7 @@ public class UserService implements UserDetailsService, IUserService {
     }
 
     @Override
+    @Transactional
     public User save(RegisterDto user) {
         if (checkIfUserExist(user.getEmail())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "ApiError.Register.EmailInUse");
