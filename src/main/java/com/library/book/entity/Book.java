@@ -2,6 +2,7 @@ package com.library.book.entity;
 
 import com.library.book.dto.AddBookDto;
 import com.library.book.enums.BookStatus;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,7 +14,11 @@ import java.util.UUID;
 @Entity
 public class Book {
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     private UUID Id;
     @NotNull
     private String Title;
@@ -24,7 +29,7 @@ public class Book {
     @NotNull
     private String ImageUrl;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Collection<Rental> rentals;
 
     public Collection<Rental> getRentals() {

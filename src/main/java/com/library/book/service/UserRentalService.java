@@ -25,35 +25,28 @@ public class UserRentalService implements IUserRentalService {
     @Autowired
     private RentalDao rentalDao;
 
-    @Autowired
-    private UserDao userDao;
-
     @Override
-    @Transactional
     public List<RentalResponse> GetUserRentals(User user) {
-        var rentals = user.getRentals();
-        return rentals.stream().map(x -> new RentalResponse(x)).toList();
+        var rentals = rentalDao.findAll().stream().filter(x -> x.getUser().getId().equals(user.getId()));
+        return rentals.map(x -> new RentalResponse(x)).toList();
     }
 
     @Override
-    @Transactional
     public RentalResponse GetUserRental(User user, UUID id) {
-        Rental rental = user.getRentals().stream().filter(x -> x.getId().equals(id)).findFirst().orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT, "ApiError.Common.NotFound"));
+        var rental = rentalDao.findAll().stream().filter(x -> x.getId().equals(id) && x.getUser().getId().equals(user.getId())).findFirst().orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT, "ApiError.Common.NotFound"));
         return new RentalResponse(rental);
     }
 
     @Override
     @Transactional
     public void CloseUserRental(User user, UUID id) {
-        Rental rental = user.getRentals().stream().filter(x -> x.getId().equals(id)).findFirst().orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT, "ApiError.Common.NotFound"));
-
+        var rental = rentalDao.findAll().stream().filter(x -> x.getId().equals(id) && x.getUser().getId().equals(user.getId())).findFirst().orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT, "ApiError.Common.NotFound"));
 
         if (!rental.isPending()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "ApiError.Common.RentalIsNotPending");
         }
 
         rental.CloseRental();
-        rentalDao.save(rental);
     }
 
     @Override
@@ -67,10 +60,8 @@ public class UserRentalService implements IUserRentalService {
         }
 
         var rental = new Rental();
-        rental.setUser(user);
         rental.setBook(book);
-        user.getRentals().add(rental);
+        rental.setUser(user);
         book.getRentals().add(rental);
-        rentalDao.save(rental);
     }
 }

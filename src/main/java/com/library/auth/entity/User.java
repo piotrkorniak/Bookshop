@@ -3,6 +3,7 @@ package com.library.auth.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.library.book.entity.Book;
 import com.library.book.entity.Rental;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +15,11 @@ import java.util.*;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     private UUID id;
 
     private String email;
@@ -32,17 +37,6 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "User_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
     private Set<Role> roles = new LinkedHashSet<>();
-
-    @OneToMany(fetch = FetchType.EAGER)
-    private Collection<Rental> rentals;
-
-    public Collection<Rental> getRentals() {
-        return rentals;
-    }
-
-    public void setRentals(Collection<Rental> rentals) {
-        this.rentals = rentals;
-    }
 
     public UUID getId() {
         return id;

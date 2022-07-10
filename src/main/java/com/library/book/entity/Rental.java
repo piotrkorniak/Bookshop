@@ -2,9 +2,9 @@ package com.library.book.entity;
 
 import com.library.auth.entity.User;
 import com.library.book.enums.RentalStatus;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
 
@@ -15,7 +15,6 @@ import static com.library.book.enums.RentalStatus.Pending;
 public class Rental {
 
     @Id
-    @GeneratedValue
     private UUID id;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -79,6 +78,7 @@ public class Rental {
     }
 
     public Rental() {
+        this.id = UUID.randomUUID();
         this.status = Pending;
         this.startDate = new Date(System.currentTimeMillis());
         this.endDate = null;
