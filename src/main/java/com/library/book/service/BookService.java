@@ -23,7 +23,9 @@ public class BookService implements IBookService {
 
     @Override
     public List<GetBookDto> GetBooks(String searchValue, boolean isAvailable) {
-        var booksQuery = bookDao.findAll().stream().filter(x -> x.getAuthor().contains(searchValue) || x.getTitle().contains(searchValue));
+        var booksQuery = bookDao.findAll().stream()
+                .filter(x -> x.getAuthor().toLowerCase().contains(searchValue.toLowerCase()) ||
+                        x.getTitle().toLowerCase().contains(searchValue.toLowerCase()));
 
         if (isAvailable) {
             booksQuery = booksQuery.filter(x -> !x.isBookRented());
