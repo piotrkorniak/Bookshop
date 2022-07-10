@@ -1,40 +1,19 @@
 package com.library.book.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class AddBookDto {
-    private String Title;
-    private String Author;
-    private String Description;
-    private String ImageUrl;
-
-    public String getTitle() {
-        return Title;
-    }
-
-    public void setTitle(String title) {
-        Title = title;
-    }
-
-    public String getAuthor() {
-        return Author;
-    }
-
-    public void setAuthor(String author) {
-        Author = author;
-    }
-
-    public String getDescription() {
-        return Description;
-    }
-
-    public void setDescription(String description) {
-        Description = description;
-    }
-
-    public String getImageUrl() {
-        return ImageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        ImageUrl = imageUrl;
-    }
+    @Size(max = 100)
+    @NotNull
+    public String title;
+    @Size(max = 100)
+    @NotNull
+    public String author;
+    @Size(max = 1000)
+    @NotNull
+    public String description;
+    @Size(max = 1000)
+    @NotNull
+    public String imageUrl;
 }

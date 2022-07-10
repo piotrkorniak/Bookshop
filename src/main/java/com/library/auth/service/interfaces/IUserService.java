@@ -14,4 +14,8 @@ public interface IUserService {
     User findOne(String email);
 
     AuthResponseDto login(String login, String password);
+
+    boolean checkIfUserExist(String email);
+
+    User findByEmail(String email);
 }

@@ -4,6 +4,7 @@ import com.library.auth.entity.User;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class RegisterDto {
@@ -14,10 +15,12 @@ public class RegisterDto {
 
 
     @NotEmpty
+    @NotNull
     private String firstName;
 
 
     @NotEmpty
+    @NotNull
     private String lastName;
 
 

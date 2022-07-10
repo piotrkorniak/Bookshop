@@ -1,14 +1,17 @@
 package com.library.auth.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.library.card.entity.Card;
+import com.library.book.entity.Book;
+import com.library.book.entity.Rental;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue
@@ -23,15 +26,22 @@ public class User {
 
     private String lastName;
 
+
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> roles;
+    @JoinTable(name = "User_roles",
+            joinColumns = @JoinColumn(name = "User_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
+    private Set<Role> roles = new LinkedHashSet<>();
 
-    @OneToOne
-    @JoinColumn(name = "card_id")
-    private Card card;
+    @OneToMany(fetch = FetchType.EAGER)
+    private Collection<Rental> rentals;
 
-    public Card getCard() {
-        return card;
+    public Collection<Rental> getRentals() {
+        return rentals;
+    }
+
+    public void setRentals(Collection<Rental> rentals) {
+        this.rentals = rentals;
     }
 
     public UUID getId() {
@@ -50,8 +60,43 @@ public class User {
         this.email = username;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities
+                = new ArrayList<>();
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        }
+        return authorities;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public void setPassword(String password) {
@@ -91,6 +136,7 @@ public class User {
     }
 
     private Boolean isAdmin() {
-        return roles.stream().anyMatch(o -> o.getName().equals("ADMIN"));
+        return roles.stream().anyMatch(o -> o.getName().equals("ROLE_ADMIN"));
     }
+
 }

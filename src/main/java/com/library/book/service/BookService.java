@@ -1,9 +1,7 @@
 package com.library.book.service;
 
 import com.library.book.dao.BookDao;
-import com.library.book.dto.AddBookDto;
 import com.library.book.dto.GetBookDto;
-import com.library.book.entity.Book;
 import com.library.book.service.interfaces.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +14,6 @@ public class BookService implements IBookService {
     @Autowired
     private BookDao bookDao;
 
-    @Override
-    public void AddBook(AddBookDto addBookDto) {
-        var book = new Book(addBookDto);
-        bookDao.save(book);
-    }
 
     @Override
     public GetBookDto GetBook(UUID id) {
@@ -29,13 +22,15 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public List<GetBookDto> GetBooks() {
-        var books = bookDao.findAll();
-        return books.stream().map(o -> new GetBookDto(o)).toList();
-    }
+    public List<GetBookDto> GetBooks(String searchValue, boolean isAvailable) {
+        var booksQuery = bookDao.findAll().stream().filter(x -> x.getAuthor().contains(searchValue) || x.getTitle().contains(searchValue));
 
-    @Override
-    public void DeleteBook(UUID id) {
-        bookDao.deleteById(id);
+        if (isAvailable) {
+            booksQuery = booksQuery.filter(x -> !x.isBookRented());
+        }
+
+        var books = booksQuery.toList();
+
+        return books.stream().map(o -> new GetBookDto(o)).toList();
     }
 }

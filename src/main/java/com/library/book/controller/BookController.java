@@ -1,10 +1,9 @@
 package com.library.book.controller;
 
-import com.library.book.dto.AddBookDto;
 import com.library.book.dto.GetBookDto;
 import com.library.book.service.interfaces.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,24 +18,13 @@ public class BookController {
 
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<GetBookDto> getBooks() {
-        return bookService.GetBooks();
+    public ResponseEntity<List<GetBookDto>> getBooks(@RequestParam(value = "", required = false) String globalSearch, @RequestParam(required = false) boolean isAvailable) {
+        var searchValue = globalSearch == null ? "" : globalSearch;
+        return ResponseEntity.ok(bookService.GetBooks(searchValue, isAvailable));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public GetBookDto getBook(@PathVariable("id") UUID id) {
-        return bookService.GetBook(id);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") UUID id) {
-        bookService.DeleteBook(id);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping(method = RequestMethod.POST)
-    public void addBook(AddBookDto addBookDto) {
-        bookService.AddBook(addBookDto);
+    public ResponseEntity<GetBookDto> getBook(@PathVariable("id") UUID id) {
+        return ResponseEntity.ok(bookService.GetBook(id));
     }
 }

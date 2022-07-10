@@ -9,21 +9,17 @@ import com.library.auth.entity.User;
 import com.library.auth.service.interfaces.IRoleService;
 import com.library.auth.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserService implements UserDetailsService, IUserService {
@@ -43,12 +39,13 @@ public class UserService implements UserDetailsService, IUserService {
     @Autowired
     private TokenProvider jwtTokenUtil;
 
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userDao.findByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException("Invalid username or password.");
-        }
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthority(user));
+    @Override
+    public User loadUserByUsername(String username) {
+        User user = userDao
+                .findByEmail(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "userNotFound"));
+
+        return user;
     }
 
     private Set<SimpleGrantedAuthority> getAuthority(User user) {
@@ -65,24 +62,28 @@ public class UserService implements UserDetailsService, IUserService {
 
     @Override
     public User findOne(String email) {
-        return userDao.findByEmail(email);
+        return findByEmail(email);
     }
 
     @Override
-    public User save(RegisterDto user) throws Exception {
-        if (userDao.findByEmail(user.getEmail()) != null)
-            throw new Exception("Email jest w użyciu");
+    public User save(RegisterDto user) {
+        if (checkIfUserExist(user.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "ApiError.Register.EmailInUse");
+        }
+
         User newUser = user.getUserFromDto();
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
 
-        Role role = roleService.findByName("USER");
         Set<Role> roleSet = new HashSet<>();
-        roleSet.add(role);
 
+
+        Role role;
         if (newUser.getEmail().split("@")[1].equals("admin.admin")) {
-            role = roleService.findByName("ADMIN");
-            roleSet.add(role);
+            role = roleService.findByName("ROLE_ADMIN");
+        } else {
+            role = roleService.findByName("ROLE_USER");
         }
+        roleSet.add(role);
 
         newUser.setRoles(roleSet);
         return userDao.save(newUser);
@@ -90,14 +91,35 @@ public class UserService implements UserDetailsService, IUserService {
 
     @Override
     public AuthResponseDto login(String username, String password) {
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        final String token = jwtTokenUtil.generateToken(authentication);
+        final String token = getJwt(username, password);
 
-        var user = userDao.findByEmail(username);
+        var user = findByEmail(username);
 
         return new AuthResponseDto(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getMainRole(), token);
+    }
+
+    private Authentication authenticate(String username, String password) {
+        try {
+            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ApiError.Login.InvalidCredentials");
+        }
+    }
+
+    private String getJwt(String userName, String password) {
+        var authenticate = authenticate(userName, password);
+        return jwtTokenUtil.generateToken(authenticate);
+    }
+
+    @Override
+    public boolean checkIfUserExist(String email) {
+        var user = userDao.findByEmail(email);
+        return user.isPresent();
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        Optional<User> user = userDao.findByEmail(email);
+        return user.orElse(null);
     }
 }
