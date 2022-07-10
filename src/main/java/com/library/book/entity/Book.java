@@ -6,9 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -20,12 +18,16 @@ public class Book {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     private UUID Id;
+    @Column(length = 100)
     @NotNull
     private String Title;
+    @Column(length = 100)
     @NotNull
     private String Author;
+    @Column(length = 1000)
     @NotNull
     private String Description;
+    @Column(length = 1000)
     @NotNull
     private String ImageUrl;
 

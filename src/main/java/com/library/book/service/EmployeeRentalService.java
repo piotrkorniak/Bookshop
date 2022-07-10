@@ -1,6 +1,5 @@
 package com.library.book.service;
 
-import com.library.auth.entity.User;
 import com.library.book.dao.BookDao;
 import com.library.book.dao.RentalDao;
 import com.library.book.dto.AddBookDto;
@@ -60,8 +59,12 @@ public class EmployeeRentalService implements IEmployeeRentalService {
     public void closeEmployeeRental(UUID id) {
         var rental = rentalDao.findAll().stream().filter(x -> x.getId().equals(id)).findFirst().orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT, "ApiError.Common.NotFound"));
 
-        if (!rental.isPending()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "ApiError.Common.RentalIsNotPending");
+        if (rental.isCanceled()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "ApiError.Common.RentalIsCanceled");
+        }
+
+        if (rental.isCompleted()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "ApiError.Common.RentalIsCompleted");
         }
 
         rental.CloseRental();
